@@ -10,6 +10,7 @@ public class Core : MonoBehaviour
     bool wayPointReached = true;
     public  bool unitSelected = false;
     public GameObject selectedUnit;
+    int moveSpeed = 10;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class Core : MonoBehaviour
         }
         if (wayPointSet && !wayPointReached)
         {
-            Move(selectedUnit, Selection, 5);
+            Move(selectedUnit, Selection, moveSpeed);
         }
     }
     void Move(GameObject character, Vector3 destination, int movement)//Заготовка движения, потом прикрутим проверку проходимости клеток, сравнение скорости персонажа с расстоянием и нормальную анимацию.
@@ -68,6 +69,9 @@ public class Core : MonoBehaviour
                 movement -= 1;
             }
         }
+        if (movement <= 0)
+            Debug.Log("Out of Movement");
+        //character.transform.position = destination;
         wayPointSet = false;
         unitSelected = false;
     }

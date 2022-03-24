@@ -23,7 +23,7 @@ public class Core : MonoBehaviour
         if (unitSelected)
             if ((Mathf.Abs(selectedUnit.transform.position.x - Selection.x) < 1) && (Mathf.Abs(selectedUnit.transform.position.y - Selection.y) < 1))
                 wayPointReached = true;
-        if (Input.GetButtonDown("Fire1"))//ставит точку по мыши и округляет координаты, чтобы в клетку попадать
+        if (Input.GetButtonDown("Fire1"))//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Debug.Log($"mousePose = {mousePos}");
@@ -40,7 +40,7 @@ public class Core : MonoBehaviour
             Move(selectedUnit, Selection, moveSpeed);
         }
     }
-    void Move(GameObject character, Vector3 destination, int movement)//Заготовка движения, потом прикрутим проверку проходимости клеток, сравнение скорости персонажа с расстоянием и нормальную анимацию.
+    void Move(GameObject character, Vector3 destination, int movement)//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
     {
         while((Mathf.Abs(Vector3.Distance(character.transform.position, destination))>0.5)&&movement>0)
         {
@@ -60,7 +60,7 @@ public class Core : MonoBehaviour
             {
                 Debug.Log("move right");
                 character.transform.position = new Vector3(character.transform.position.x + 1F, character.transform.position.y, character.transform.position.z);
-                movement -= -1;
+                movement -= 1; // Р‘С‹Р»Рѕ -1, РїРѕСЃС‚Р°РІРёР» С‚РµСЃС‚РѕРІРѕ 1
             }
             if (character.transform.position.y < destination.y)
             {
@@ -71,7 +71,7 @@ public class Core : MonoBehaviour
         }
         if (movement <= 0)
             Debug.Log("Out of Movement");
-        //character.transform.position = destination;
+        character.transform.position = destination;
         wayPointSet = false;
         unitSelected = false;
     }

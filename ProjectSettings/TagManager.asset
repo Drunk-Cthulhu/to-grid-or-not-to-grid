@@ -4,7 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - HeroKnight
+  - Hero
   layers:
   - Default
   - TransparentFX

@@ -8,71 +8,76 @@ public class Core : MonoBehaviour
     Vector3 Selection = new Vector3();
     bool wayPointSet = false;
     bool wayPointReached = true;
-    public  bool unitSelected = false;
+    public bool unitSelected = false;
+    public bool playerActive = false;
     public GameObject selectedUnit;
+    public GameObject targetUnit;
+    public int[,] gridValues;
+    public bool targetSelected = false; 
+    GameObject heroes;
     int moveSpeed = 10;
+    List<Transform> units = new List<Transform>();
     // Start is called before the first frame update
     void Start()
     {
         selectionHighlight = GameObject.Find("Selection");
+        heroes = GameObject.Find("Heroes");
+        foreach(Transform child in heroes.transform)
+        {
+            if (child.tag == "Hero")
+                units.Add(child);
+        }
+        TurnStart();
     }
-
+    void TurnStart()
+    {
+       
+    }
     // Update is called once per frame
     void Update()
     {
         if (unitSelected)
             if ((Mathf.Abs(selectedUnit.transform.position.x - Selection.x) < 1) && (Mathf.Abs(selectedUnit.transform.position.y - Selection.y) < 1))
                 wayPointReached = true;
-        if (Input.GetButtonDown("Fire1"))//ставит точку по мыши и округляет координаты, чтобы в клетку попадать
+        if ((Input.GetButtonDown("Fire1"))&&(playerActive==true)&&(unitSelected))
         {
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Debug.Log($"mousePose = {mousePos}");
+            Debug.Log($"mousePos = {mousePos}");
             Selection = new Vector3(Mathf.Floor(mousePos.x), Mathf.Floor(mousePos.y), 0);
             selectionHighlight.transform.position = Selection;
-            if (!wayPointSet&&unitSelected)
-            {   
+            if (!wayPointSet && unitSelected)
+            {
                 wayPointSet = true;
                 wayPointReached = false;
             }
         }
-        if (wayPointSet && !wayPointReached)
+        if ((wayPointSet) && (!wayPointReached) && (targetSelected == true))
+        {
+            Selection = Vector3.MoveTowards(Selection, selectedUnit.transform.position, 1F);
+            Move(selectedUnit, Selection, moveSpeed);
+            Attack();
+            playerActive = false;
+            TurnStart();
+        }
+        if ((wayPointSet) && (!wayPointReached) && (targetSelected == false))
         {
             Move(selectedUnit, Selection, moveSpeed);
-        }
+            playerActive = false;
+            TurnStart();
+        }        
     }
-    void Move(GameObject character, Vector3 destination, int movement)//Заготовка движения, потом прикрутим проверку проходимости клеток, сравнение скорости персонажа с расстоянием и нормальную анимацию.
+    void Move(GameObject character, Vector3 destination, int movement)
     {
-        while((Mathf.Abs(Vector3.Distance(character.transform.position, destination))>0.5)&&movement>0)
+        if ((Mathf.Abs(Vector3.Distance(character.transform.position, destination)) < movement))
         {
-            if (character.transform.position.x > destination.x)
-            {
-                Debug.Log("move left");
-                character.transform.position = new Vector3(character.transform.position.x - 1F, character.transform.position.y, character.transform.position.z);
-                movement -= 1;
-            }
-            if (character.transform.position.y > destination.y)
-            {
-                Debug.Log("move down");
-                character.transform.position = new Vector3(character.transform.position.x, character.transform.position.y - 1F, character.transform.position.z);
-                movement -= 1;
-            }
-            if (character.transform.position.x < destination.x)
-            {
-                Debug.Log("move right");
-                character.transform.position = new Vector3(character.transform.position.x + 1F, character.transform.position.y, character.transform.position.z);
-                movement -= -1;
-            }
-            if (character.transform.position.y < destination.y)
-            {
-                Debug.Log("move up");
-                character.transform.position = new Vector3(character.transform.position.x, character.transform.position.y + 1F, character.transform.position.z);
-                movement -= 1;
-            }
+            character.transform.position = new Vector3(Mathf.Round(destination.x), Mathf.Round(destination.y), 0);
         }
-        if (movement <= 0)
-            Debug.Log("Out of Movement");
-        //character.transform.position = destination;
         wayPointSet = false;
         unitSelected = false;
+    }
+    public void Attack()
+    {
+        Debug.Log($"{selectedUnit.name} attacks {targetUnit.name}");
+        targetSelected = false;   
     }
 }

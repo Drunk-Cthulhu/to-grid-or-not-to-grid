@@ -22,7 +22,17 @@ public class HeroButton : MonoBehaviour
     {
         //Debug.Log("Button clicked ");
         Core coreScript = core.GetComponent<Core>();
-        coreScript.selectedUnit = this.transform.root.gameObject;
-        coreScript.unitSelected = true;
+        if (coreScript.playerActive == false)
+        {
+            coreScript.selectedUnit = this.transform.parent.parent.gameObject;
+           Debug.Log(this.transform.parent.parent.gameObject.name);
+            coreScript.unitSelected = true;
+            coreScript.playerActive = true;
+        }
+        else
+        {
+            coreScript.targetUnit = this.transform.root.gameObject;
+        }
+        
     }
 }
